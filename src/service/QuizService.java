@@ -2,8 +2,15 @@ package service;
 
 import model.Question;
 
+import java.util.List;
+
 public interface QuizService {
-    Question getQuestion(int id);
+
+    Question getQuestionById(int id);
+
     ServerAnswer getServiceAnswer(int id, int[] clientAnswer);
+
     void addQuestionToList(Question question);
+
+    List<Question> getAllQuestions();
 }

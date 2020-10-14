@@ -1,13 +1,14 @@
-package engine;
+package controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import service.QuizService;
 import service.ServerAnswer;
 import model.Question;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import service.ClientAnswer;
-import service.QuizServiceImpl;
 
 import java.util.List;
 
@@ -15,12 +16,13 @@ import java.util.List;
 @RestController()
 public class QuizController {
 
-    private QuizServiceImpl quizService = new QuizServiceImpl();
+    @Autowired
+    private QuizService quizService;
 
     @GetMapping(path = "/api/quizzes/{id}")
     public Question getQuiz (@PathVariable int id) {
       try {
-          return quizService.getQuestion(id);
+          return quizService.getQuestionById(id);
       } catch (IndexOutOfBoundsException e) {
           throw new ResponseStatusException(HttpStatus.NOT_FOUND);
       }
@@ -40,12 +42,12 @@ public class QuizController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         quizService.addQuestionToList(question);
-        question.setId(quizService.getQuestionList().size());
+        question.setId(quizService.getAllQuestions().size());
         return question;
     }
 
     @GetMapping(path = "/api/quizzes")
     public List<Question> getAllQuestions() {
-        return quizService.getQuestionList();
+        return quizService.getAllQuestions();
     }
 }

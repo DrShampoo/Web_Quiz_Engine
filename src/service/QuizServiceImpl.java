@@ -1,9 +1,11 @@
 package service;
 
 import model.Question;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import repository.QuestionRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,12 +14,14 @@ import java.util.List;
 @Service
 public class QuizServiceImpl implements QuizService {
 
-    private List<Question> questionList = new ArrayList<>();
+    @Autowired
+    private QuestionRepository questionRepository;
+
     private ServerAnswer serverAnswer;
 
     @Override
-    public Question getQuestion(int id) {
-        return questionList.get(id - 1);
+    public Question getQuestionById(int id) {
+        return questionRepository.findById(id).get();
     }
 
     @Override
@@ -36,15 +40,16 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void addQuestionToList(Question question) {
-        questionList.add(question);
+        questionRepository.save(question);
     }
 
-    public List<Question> getQuestionList() {
-        return questionList;
+    @Override
+    public List<Question> getAllQuestions() {
+        return questionRepository.findAll();
     }
 
     private boolean checkClientAnswer(int id, int[] clientAnswers) {
-        int[] arrayAnswer = questionList.get(id - 1).getAnswer();
+        int[] arrayAnswer = getQuestionById(id - 1).getAnswer();
         if ((clientAnswers == null || clientAnswers.length == 0) &&
                 (arrayAnswer == null || arrayAnswer.length == 0)) {
             return true;
