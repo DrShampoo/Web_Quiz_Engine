@@ -1,4 +1,4 @@
-package service;
+package engine.service;
 
 public class ServerAnswer {
     private boolean isSuccess;
