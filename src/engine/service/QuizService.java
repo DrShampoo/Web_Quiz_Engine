@@ -15,4 +15,6 @@ public interface QuizService {
     void createQuestion(Question question);
 
     List<Question> getAllQuestions();
+
+    void removeQuestion(int id, String userEmail);
 }

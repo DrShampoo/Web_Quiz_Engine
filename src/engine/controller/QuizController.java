@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -41,6 +42,16 @@ public class QuizController {
         }
         quizService.createQuestion(question);
         return question;
+    }
+
+    @DeleteMapping(path = "/api/quizzes/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteQuiz (@PathVariable int id, Principal principal) {
+        try {
+            quizService.removeQuestion(id, principal.getName());
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping(path = "/api/quizzes")
