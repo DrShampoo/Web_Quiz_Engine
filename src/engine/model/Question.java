@@ -23,15 +23,15 @@ public class Question {
     @Column
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Integer> answer;
-    @ManyToOne
-    @JoinColumn
-    private User author;
+    @Column
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String author;
 
-    public User getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 

@@ -46,7 +46,7 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public void removeQuestion(int id, String userEmail) {
         Question question = getQuestionById(id);
-        if (!userEmail.equals(question.getAuthor().getEmail())){
+        if (!userEmail.equals(question.getAuthor())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         questionRepository.delete(question);

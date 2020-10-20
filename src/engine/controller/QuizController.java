@@ -34,12 +34,13 @@ public class QuizController {
     }
 
     @PostMapping(path = "/api/quizzes", consumes = "application/json")
-    public Question addQuestion(@RequestBody Question question) {
+    public Question addQuestion(@RequestBody Question question, Principal principal) {
         if (question.getText() == null || question.getTitle() == null || question.getOptions() == null ||
         question.getOptions().size() < 2 || question.getText().equals("") ||
         question.getTitle().equals("")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+        question.setAuthor(principal.getName());
         quizService.createQuestion(question);
         return question;
     }
