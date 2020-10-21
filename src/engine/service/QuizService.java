@@ -1,6 +1,7 @@
 package engine.service;
 
 import engine.model.Question;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface QuizService {
 
     void createQuestion(Question question);
 
-    List<Question> getAllQuestions();
+    Page<Question> getAllQuestions(int pageNum);
 
     void removeQuestion(int id, String userEmail);
 }

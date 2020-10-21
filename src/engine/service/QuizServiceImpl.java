@@ -3,6 +3,9 @@ package engine.service;
 import engine.model.Question;
 import engine.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +19,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Autowired
     private QuestionRepository questionRepository;
+
 
     private ServerAnswer serverAnswer;
 
@@ -53,21 +57,25 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public List<Question> getAllQuestions() {
-        return questionRepository.findAll();
+    public Page<Question> getAllQuestions(int pageNum) {
+        Pageable pageable = PageRequest.of(pageNum, 10);
+        return questionRepository.findAll(pageable);
     }
 
     private boolean checkClientAnswer(int id, List<Integer> clientAnswers) {
-        List<Integer> correctAnswers = getQuestionById(id).getAnswer();
+        boolean isCorrectAnswer = false;
+        Question question = getQuestionById(id);
+        List<Integer> correctAnswers = question.getAnswer();
         if ((clientAnswers == null || clientAnswers.size() == 0) &&
                 (correctAnswers == null || correctAnswers.size() == 0)) {
-            return true;
+            isCorrectAnswer = true;
         }
         if (clientAnswers != null && correctAnswers != null) {
             Collections.sort(clientAnswers);
             Collections.sort(correctAnswers);
-            return clientAnswers.equals(correctAnswers);
+            isCorrectAnswer = clientAnswers.equals(correctAnswers);
         }
-        return false;
+
+        return isCorrectAnswer;
     }
 }

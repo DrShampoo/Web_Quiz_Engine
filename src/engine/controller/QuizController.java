@@ -4,6 +4,7 @@ import engine.model.Question;
 import engine.service.QuizServiceImpl;
 import engine.service.ServerAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -56,7 +57,7 @@ public class QuizController {
     }
 
     @GetMapping(path = "/api/quizzes")
-    public List<Question> getAllQuestions() {
-        return quizService.getAllQuestions();
+    public Page<Question> getAllQuestions(@RequestParam(name = "page", defaultValue = "0") int pageNum) {
+        return quizService.getAllQuestions(pageNum);
     }
 }
